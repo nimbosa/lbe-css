@@ -1,5 +1,6 @@
 # coding: utf8
 # LBE - Lite Block Explorer
+# Author: hellcatz <http://github.com/hellcatz>
 # Author: Ondrej Sika <ondrej@ondrejsika.com>
 # License: MIT <http://ondrejsika.com/license/mit.txt>
 
@@ -10,8 +11,7 @@ import datetime
 from flask import Flask, render_template
 from jsonrpc_requests import Server, TransportError, ProtocolError
 
-
-parser = argparse.ArgumentParser('LBE - Light Blockchain Explorer')
+parser = argparse.ArgumentParser('LBE - Light Blockchain Explorer (CSS Enhanced)')
 parser.add_argument('HOST', type=str)
 parser.add_argument('PORT', type=int)
 parser.add_argument('XCOIND_HOST', type=str)
@@ -24,6 +24,12 @@ parser.add_argument('--debug', action='store_true')
 
 args = parser.parse_args()
 
+from datetime import tzinfo, timedelta
+class simple_utc(tzinfo):
+    def tzname(self):
+        return "UTC"
+    def utcoffset(self, dt):
+        return timedelta(0)
 
 class DummyCache(object):
     def set(self, key, val):
@@ -156,10 +162,13 @@ xcoind = Xcoind(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIN
 app = Flask(__name__)
 app.debug = args.debug
 
+@app.template_filter('iso_time')
+def timeisotime(s):
+    return datetime.datetime.utcfromtimestamp(s).replace(tzinfo=simple_utc()).isoformat()
 
 @app.template_filter('formated_time')
 def timectime(s):
-    return datetime.datetime.fromtimestamp(s).strftime('%y-%m-%d %H:%M:%S')
+    return datetime.datetime.utcfromtimestamp(s).replace(tzinfo=simple_utc())
 
 
 @app.route('/')
