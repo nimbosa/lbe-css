@@ -1,5 +1,39 @@
-<p>Light Block Explorer (LBE) | {% if coin %} {{ coin }} | {% endif %} <a href="/">index</a></p>
+<!doctype html>
 
-{% block content %}{% endblock content %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
 
-<p>(c) <a href="http://ondrejsika.com">Ondrej Sika</a>, Source on <a href="https://github.com/ondrejsika/lbe">Github</a></p>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
+
+    <title>LBEE - Light Block Explorer Enhanced</title>
+
+</head>
+
+<body>
+
+<header>
+    <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">
+        <a class="pure-menu-heading hot-swapper" href="/"><i class="fa fa-home"></i>&nbsp;LBEE - Light Block Explorer Enhanced</a>
+    </div>
+</header>
+
+<main>
+<div style="padding-left: 18px;padding-right: 18px;">
+    {% block content %}{% endblock content %}
+</div>
+</main>
+
+<footer>
+<div style="padding-left: 18px;padding-right: 18px;">
+    <p align="center"><small>(c) LBE (CSS Enhanced) <a href="https://github.com/hellcatz/">hellcatz</a>, LBEE Source on <a href="https://github.com/hellcatz/lbe/">Github</a>
+    <br />(c) LBE (Original Author) <a href="http://ondrejsika.com">Ondrej Sika</a>, LBE Source on <a href="https://github.com/ondrejsika/lbe">Github</a></small></p>
+</div>
+</footer>
+
+</body>
+</html>
