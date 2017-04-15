@@ -1,10 +1,12 @@
+
 {% extends 'base.html' %}
 {% block content %}
-<h1>Blocks</h1>
-<table>
+
+<h1>{% if coin %}{{ coin }} {% endif %}Recent Blocks</h1>
+<table class="pure-table" style="width: 100%;">
+    <thead>
     <tr>
         <th>height</th>
-        <th>hash</th>
         <th>time</th>
         <th>formated</th>
         <th>num tx</th>
@@ -16,10 +18,10 @@
         <th>difficulty</th>
         <th>bits</th>
     </tr>
+    </thead>
 {% for block in blocks %}
-<tr>
-    <td>{{ block.height }}</td>
-    <td><a href="/block/{{ block.hash }}">{{ block.hash }}</a></td>
+<tr class="pure-table-even">
+    <td><a href="/block/{{ block.hash }}">{{ block.height }}</a></td>
     <td>{{ block.time }}</td>
     <td>{{ block.time|formated_time }}</td>
     <td>{{ block.tx|length }}</td>
@@ -33,4 +35,5 @@
 </tr>
 {% endfor %}
 </table>
+
 {% endblock content %}
