@@ -19,11 +19,11 @@
         <td><a href="/block/{{ block.nextblockhash }}">{{ block.nextblockhash }}</a></td>
     </tr>
     <tr>
-        <th>time</th>
-        <td>{{ block.time }}</td>
+        <th>age</th>
+        <td><time class="timeago" datetime="{{ block.time|iso_time }}">{{ block.time|iso_time }}</time></td>
     </tr>
     <tr>
-        <th>formated</th>
+        <th>time</th>
         <td>{{ block.time|formated_time }}</td>
     </tr>
     <tr>
@@ -80,4 +80,9 @@
     </tr>
 {% endfor %}
 </table>
+<script>
+$(document).ready(function() {
+  $("time.timeago").timeago();
+});
+</script>
 {% endblock content %}
