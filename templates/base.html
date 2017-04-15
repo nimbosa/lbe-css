@@ -10,15 +10,36 @@
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.4.2/pure-min.css">
 
-    <title>LBEE - Light Block Explorer Enhanced</title>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.5.4/jquery.timeago.min.js"></script>
+    
+    <title>LBE (CSS Enhanced) Block Explorer</title>
 
 </head>
 
 <body>
-
+<script type="text/javascript">
+        $(document).ready(function(){
+                $('.pure-button-primary').click(function(){
+                    if ($('.input-lg').val().length < 8) {
+                        alert('Invalid! Doh!');
+                    } else if ($('.input-lg').val().startsWith('0')) {
+                        window.location = "/block/" + $('.input-lg').val();
+                    } else {
+                        window.location = "/tx/" + $('.input-lg').val();
+                    }
+                });
+        });
+</script>
 <header>
     <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">
-        <a class="pure-menu-heading hot-swapper" href="/"><i class="fa fa-home"></i>&nbsp;LBEE - Light Block Explorer Enhanced</a>
+        <a class="pure-menu-heading hot-swapper" href="/"><i class="fa fa-home"></i>&nbsp;LBE (CSS Enhanced) {% if coin %}{{ coin }}{% endif %} Block Explorer</a>
+        <form class="pure-form" style="float:right;padding-right: 18px;">
+            <fieldset>
+                <input type="text" class="form-control input-lg" placeholder="Enter Block or Tx Hash" >
+                <button  class="pure-button pure-button-primary" type="button">Find</button>
+            </fieldset>
+        </form>
     </div>
 </header>
 
@@ -30,8 +51,8 @@
 
 <footer>
 <div style="padding-left: 18px;padding-right: 18px;">
-    <p align="center"><small>(c) LBE (CSS Enhanced) <a href="https://github.com/hellcatz/">hellcatz</a>, LBEE Source on <a href="https://github.com/hellcatz/lbe/">Github</a>
-    <br />(c) LBE (Original Author) <a href="http://ondrejsika.com">Ondrej Sika</a>, LBE Source on <a href="https://github.com/ondrejsika/lbe">Github</a></small></p>
+    <p align="center"><small>(c) LBE (CSS Enhanced) <a href="https://github.com/hellcatz/">hellcatz</a>, Source on <a href="https://github.com/hellcatz/lbe/">Github</a>
+    <br />(c) LBE (Original Author) <a href="http://ondrejsika.com">Ondrej Sika</a>, Source on <a href="https://github.com/ondrejsika/lbe">Github</a></small></p>
 </div>
 </footer>
 
