@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Block ({{ block.height }}) {{ block.hash }}</h1>
-<table>
+<h1>{% if coin %}{{ coin }} {% endif %}Block ({{ block.height }})</h1>
+<table class="pure-table" style="width: 100%;">
     <tr>
         <th>height</th>
         <td>{{ block.height }}</td>
@@ -70,7 +70,7 @@
 
 <h3>Transactions</h3>
 
-<table>
+<table class="pure-table" style="width: 100%;">
     <tr>
         <th>hash</th>
     </tr>
