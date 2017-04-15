@@ -32,3 +32,7 @@ LBE requires this rpc calls:
 Show help
 
     python lbe.py -h
+    
+Example Zcash Testnet
+
+    python lbe.py :: 8000 localhost 18232 username password --coin TAZ --n-last-blocks 100
