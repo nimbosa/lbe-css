@@ -11,7 +11,7 @@ Basic CSS enhanced block explorer for every forks of Bitcoin (Namecoin, Litecoin
 
 ### Xcoind requirements
 
-LBEE requires this rpc calls:
+LBEE requires these rpc calls:
 
 - getbestblockhash
 - getblock
@@ -36,7 +36,7 @@ Show help
 
 ## Example Zcash Testnet Run Script
 
-/home/user/start.sh
+/home/user/lbe/start.sh
 
     #!/bin/bash
     source .env/bin/activate
