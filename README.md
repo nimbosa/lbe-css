@@ -7,11 +7,11 @@
 
 ### Abstract
 
-Basic block explorer for every forks of Bitcoin (Namecoin, Litecoin, ..), which has same RPC interface.
+Basic CSS enhanced block explorer for every forks of Bitcoin (Namecoin, Litecoin, Zcash, Zclassic, Komodo ...)
 
 ### Xcoind requirements
 
-LBE requires this rpc calls:
+LBEE requires this rpc calls:
 
 - getbestblockhash
 - getblock
@@ -21,7 +21,7 @@ LBE requires this rpc calls:
 
 ### Install
 
-    git clone git@github.com:ondrejsika/lbe.git
+    git clone http://github.com/hellcatz/lbe
     cd lbe
     virtualenv .env
     source .env/bin/activate
@@ -43,7 +43,7 @@ Show help
     python lbe.py :: 8000 localhost 18232 username password --coin TAZ --n-last-blocks 100
     
 ## Example Systemd Unit Script
-This requires the coin daemon to also be setup as a service.
+This requires the Xcoind daemon to be setup as a service and running properly.
 
 /etc/systemd/system/lbe-block-explorer.service    
     
