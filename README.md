@@ -1,6 +1,6 @@
 # Light Block Explorer (CSS Enhanced)
 
-- __Author__: LBEE - hellcatz 
+- __Author__: LBE - hellcatz 
 - __Author__: LBE - Ondrej Sika <https://github.com/ondrejsika/lbe>
 - __License__: MIT <http://ondrejsika.com/license/mit.txt>
 
