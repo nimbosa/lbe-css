@@ -1,5 +1,7 @@
 # Light Block Explorer (CSS Enhanced)
 
+    Equihash/Zcash based coins
+
 - __Author__: LBE - hellcatz 
 - __Author__: LBE - Ondrej Sika <https://github.com/ondrejsika/lbe>
 - __License__: MIT <http://ondrejsika.com/license/mit.txt>
@@ -7,7 +9,7 @@
 
 ### Abstract
 
-Basic CSS enhanced block explorer for every forks of Bitcoin (Namecoin, Litecoin, Zcash, Zclassic, Komodo ...)
+Basic CSS enhanced block explorer for every forks of Zcash (Zclassic, Zdash, Komodo ...)
 
 ### Xcoind requirements
 
