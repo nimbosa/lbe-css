@@ -40,7 +40,7 @@ Show help
 
     #!/bin/bash
     source .env/bin/activate
-    python lbe.py :: 8000 localhost 18232 username password --coin TAZ --n-last-blocks 100
+    python lbe.py :: 8000 localhost 18232 username password --equihash=1 --coin TAZ --n-last-blocks 100
     
 ## Example Systemd Unit Script
 This requires the Xcoind daemon to be setup as a service and running properly.
