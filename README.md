@@ -50,7 +50,7 @@ This requires the Xcoind daemon to be setup as a service and running properly.
     [Unit]
     Wants=network-online.target
     After=network.target network-online.target
-    Description=LBEE Block Explorer Service
+    Description=LBE Block Explorer Service
     
     [Service]
     Environment=HOME=/home/user
