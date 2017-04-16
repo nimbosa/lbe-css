@@ -1,4 +1,4 @@
-# Light Block Explorer Enhanced (LBEE)
+# Light Block Explorer (CSS Enhanced)
 
 - __Author__: LBEE - hellcatz 
 - __Author__: LBE - Ondrej Sika <https://github.com/ondrejsika/lbe>
