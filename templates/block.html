@@ -38,6 +38,12 @@
         <th>size</th>
         <td>{{ block.size }}</td>
     </tr>
+{% if eqhash>0 %}
+    <tr>
+        <th>solution size</th>
+        <td>{{ block.solution_size }}</td>
+    </tr>
+ {% endif %}
     <tr>
         <th>version</th>
         <td>{{ block.version }}</td>
@@ -64,8 +70,27 @@
     </tr>
     <tr>
         <th></th>
-        <td>{{ coinbase.coinbase_text }}</td>
+        <td><pre>{{ coinbase.coinbase_text }}</pre></td>
     </tr>
+{% if eqhash>0 %}
+    <tr>
+        <th>raw header</th>
+        <td><input value="{{ block.raw}}" style="width: 100%;" /></td>
+    </tr>
+    <tr>
+        <th>nonce</th>
+        <td><input value="{{ block.nonce }}" style="width:100%;" /></td>
+    </tr>
+    <tr>
+        <th>nonce text</th>
+        <td><pre>{{ block.nonce_text }}</pre></td>
+    </tr>
+    <tr>
+        <th>solution</th>
+        <td><pre>{% for chunk in block.solution_br %}{{ chunk }}
+{% endfor %}</pre></td>
+    </tr>
+ {% endif %}
 </table>
 
 <h3>Transactions</h3>

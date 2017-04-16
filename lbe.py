@@ -7,9 +7,13 @@
 import argparse
 import binascii
 import datetime
+import json
 
+from StringIO import StringIO
 from flask import Flask, render_template
 from jsonrpc_requests import Server, TransportError, ProtocolError
+
+from utils import chunks, var_int_deserialize
 
 parser = argparse.ArgumentParser('LBE - Light Blockchain Explorer (CSS Enhanced)')
 parser.add_argument('HOST', type=str)
@@ -20,6 +24,7 @@ parser.add_argument('XCOIND_USER', type=str)
 parser.add_argument('XCOIND_PASSWORD', type=str)
 parser.add_argument('--coin', type=str, default='')
 parser.add_argument('--n-last-blocks', type=int, default=100)
+parser.add_argument('--equihash', type=int, default=1)
 parser.add_argument('--debug', action='store_true')
 
 args = parser.parse_args()
@@ -97,7 +102,11 @@ class Xcoind(object):
         return blocks
 
     def gettx(self, tx_hash):
-        raw = self.rpc('getrawtransaction', tx_hash)
+        try:
+            raw = self.rpc('getrawtransaction', tx_hash)
+        except (TransportError, ProtocolError), e:
+            raise ProtocolError('getrawtransaction ' + tx_hash + '\n' + 'Error ' + json.JSONEncoder().encode(e.args))
+            
         return self.rpc('decoderawtransaction', raw)
 
     def gettxs(self, tx_hashes):
@@ -117,29 +126,33 @@ class Xcoind(object):
     def getsimpletx(self, txid):
         tx = self.gettx(txid)
         vins = []
-        if 'coinbase' in tx['vin'][0]:
-            coinbase = tx['vin'][0]['coinbase']
-            coinbase_text = ''.join([i if ord(i) < 128 else '.' for i in binascii.unhexlify(coinbase)])
+        if tx['vin']:
+            if 'coinbase' in tx['vin'][0]:
+                coinbase = tx['vin'][0]['coinbase']
+                coinbase_text = ''.join([i if ord(i) < 128 else '.' for i in binascii.unhexlify(coinbase)])
+            else:
+                coinbase = None
+                coinbase_text = None
+                for vin in tx['vin']:
+                    try:
+                        in_tx = self.gettx(vin['txid'])
+                    except (TransportError, ProtocolError), e:
+                        in_tx = None
+                    if in_tx:
+                        for in_vout in in_tx['vout']:
+                            if vin['vout'] == in_vout['n']:
+                                vins.append({
+                                    'address': in_vout['scriptPubKey']['addresses'][0] if 'addresses' in in_vout['scriptPubKey'] else None,
+                                    'value': in_vout['value'],
+                                })
+                    else:
+                        vins.append({
+                            'address': '???',
+                            'value': '???',
+                            })
         else:
             coinbase = None
             coinbase_text = None
-            for vin in tx['vin']:
-                try:
-                    in_tx = self.gettx(vin['txid'])
-                except (TransportError, ProtocolError), e:
-                    in_tx = None
-                if in_tx:
-                    for in_vout in in_tx['vout']:
-                        if vin['vout'] == in_vout['n']:
-                            vins.append({
-                                'address': in_vout['scriptPubKey']['addresses'][0] if 'addresses' in in_vout['scriptPubKey'] else None,
-                                'value': in_vout['value'],
-                            })
-                else:
-                    vins.append({
-                        'address': '???',
-                        'value': '???',
-                    })
 
         vouts = []
         for vout in tx['vout']:
@@ -155,9 +168,39 @@ class Xcoind(object):
             'vin': vins,
             'vout': vouts,
             'tx': tx,
-        }
+            }
+            
+class Zcashd(Xcoind):
+    def getblock(self, hash):
+        block = super(Zcashd, self).getblock(hash)
+        raw_block = self.rpc('getblock', hash, False)
+        block.update(self._parse_raw_block_header(raw_block))
+        return block
 
-xcoind = Xcoind(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIND_PASSWORD, cache=DummyCache())
+    @staticmethod
+    def _parse_raw_block_header(header):
+        nonce = header[2*108:2*140]
+        nonce_text = ''.join([i if ord(i) < 128 else '.' for i in binascii.unhexlify(nonce)])
+        solution_size_hex = header[2*140:2*143]
+        solution_size_int = var_int_deserialize(StringIO(binascii.unhexlify(solution_size_hex)))
+        solution = header[2*143:2*(143+solution_size_int)]
+
+        return {
+            'nonce': nonce,
+            'nonce_text': nonce_text,
+            'solution_size': solution_size_int,
+            'solution_size_hex': solution_size_hex,
+            'solution': solution,
+            'solution_br': chunks(solution, 128),
+            'raw': header,
+}
+
+eqhashBased = args.equihash
+if eqhashBased > 0:
+    xcoind = Zcashd(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIND_PASSWORD, cache=DummyCache())
+else:
+    xcoind = Xcoind(args.XCOIND_HOST, args.XCOIND_PORT, args.XCOIND_USER, args.XCOIND_PASSWORD, cache=DummyCache())
+    
 
 app = Flask(__name__)
 app.debug = args.debug
@@ -176,9 +219,9 @@ def index():
     try:
         blocks = xcoind.getlastnblocks(args.n_last_blocks)
     except (TransportError, ProtocolError), e:
-        print e
-        return render_template('error_xcoind.html', coin=args.coin)
-    return render_template('index.html', blocks=blocks, coin=args.coin)
+        return render_template('error_xcoind.html', error=e, coin=args.coin)
+        
+    return render_template('index.html', blocks=blocks, coin=args.coin, eqhash=eqhashBased)
 
 
 @app.route('/block/<hash>')
@@ -187,21 +230,18 @@ def block(hash):
         block = xcoind.getblock(hash)
         coinbase = xcoind.getsimpletx(block['tx'][0])
     except (TransportError, ProtocolError), e:
-        print e
-        return render_template('error_xcoind.html', coin=args.coin)
+        return render_template('error_xcoind.html', error=e, coin=args.coin)
 
-    return render_template('block.html', block=block, coinbase=coinbase, coin=args.coin)
+    return render_template('block.html', block=block, coinbase=coinbase, coin=args.coin, eqhash=eqhashBased)
 
 @app.route('/tx/<hash>')
 def tx(hash):
     try:
         tx = xcoind.getsimpletx(hash)
     except (TransportError, ProtocolError), e:
-        print e
-        return render_template('error_xcoind.html', coin=args.coin)
+        return render_template('error_xcoind.html', error=e, coin=args.coin, eqhash=eqhashBased)
 
     return render_template('tx.html', tx=tx, coin=args.coin)
 
 if __name__ == '__main__':
     app.run(host=args.HOST, port=args.PORT)
-

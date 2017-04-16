@@ -1,17 +1,19 @@
-# Light Block Explorer Enhanced (LBEE)
+# Light Block Explorer (CSS Enhanced)
 
-- __Author__: LBEE - hellcatz 
+    Equihash/Zcash based coins
+
+- __Author__: LBE - hellcatz 
 - __Author__: LBE - Ondrej Sika <https://github.com/ondrejsika/lbe>
 - __License__: MIT <http://ondrejsika.com/license/mit.txt>
 
 
 ### Abstract
 
-Basic CSS enhanced block explorer for every forks of Bitcoin (Namecoin, Litecoin, Zcash, Zclassic, Komodo ...)
+Basic CSS enhanced block explorer for Zcash and equihash forks (Zclassic, Zdash, Komodo ...)
 
 ### Xcoind requirements
 
-LBEE requires these rpc calls:
+LBE requires these rpc calls:
 
 - getbestblockhash
 - getblock
@@ -40,7 +42,7 @@ Show help
 
     #!/bin/bash
     source .env/bin/activate
-    python lbe.py :: 8000 localhost 18232 username password --coin TAZ --n-last-blocks 100
+    python lbe.py :: 8000 localhost 18232 username password --equihash=1 --coin TAZ --n-last-blocks 100
     
 ## Example Systemd Unit Script
 This requires the Xcoind daemon to be setup as a service and running properly.
@@ -50,7 +52,7 @@ This requires the Xcoind daemon to be setup as a service and running properly.
     [Unit]
     Wants=network-online.target
     After=network.target network-online.target
-    Description=LBEE Block Explorer Service
+    Description=LBE Block Explorer Service
     
     [Service]
     Environment=HOME=/home/user
