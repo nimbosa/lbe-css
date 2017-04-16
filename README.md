@@ -9,7 +9,7 @@
 
 ### Abstract
 
-Basic CSS enhanced block explorer for every forks of Zcash (Zclassic, Zdash, Komodo ...)
+Basic CSS enhanced block explorer for Zcash and equihash forks (Zclassic, Zdash, Komodo ...)
 
 ### Xcoind requirements
 
