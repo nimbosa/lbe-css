@@ -8,30 +8,47 @@
     <tr>
         <th>height</th>
         <th>age</th>
-        <th>time</th>
+        <!--<th>time</th>-->
         <th>num tx</th>
+        <!--
         <th>confirmations</th>
-        <th>size</th>
+        <th>size</th>-->
         <th>version</th>
+        <!--
         <th>version (hex)</th>
         <th>version (bin)</th>
+        -->
         <th>difficulty</th>
         <th>bits</th>
+{% if eqhash>0 %}
+        <th>nonce (hex)</th>
+        <th>nonce (text)</th>
+        <th>solution size</th>
+{% endif %}
     </tr>
     </thead>
 {% for block in blocks %}
 <tr class="pure-table-even">
     <td><a href="/block/{{ block.hash }}">{{ block.height }}</a></td>
     <td><time class="timeago" datetime="{{ block.time|iso_time }}">{{ block.time|iso_time }}</time></td>
-    <td>{{ block.time|formated_time }}</td>
+    <!--<td>{{ block.time|formated_time }}</td>-->
     <td>{{ block.tx|length }}</td>
+    <!--
     <td>{{ block.confirmations }}</td>
     <td>{{ block.size }}</td>
+    -->
     <td>{{ block.version }}</td>
+    <!--
     <td>{{ block.version_hex }}</td>
     <td>{{ block.version_bin }}</td>
+    -->
     <td>{{ block.difficulty }}</td>
     <td>{{ block.bits }}</td>
+{% if eqhash>0 %}
+    <td><input value="{{ block.nonce }}" style="width:100%;" /></td>
+    <td>{{ block.nonce_text }}</td>
+    <td>{{ block.solution_size }}</td>
+{% endif %}
 </tr>
 {% endfor %}
 </table>
