@@ -11,7 +11,7 @@ Basic CSS enhanced block explorer for every forks of Bitcoin (Namecoin, Litecoin
 
 ### Xcoind requirements
 
-LBEE requires these rpc calls:
+LBE requires these rpc calls:
 
 - getbestblockhash
 - getblock
