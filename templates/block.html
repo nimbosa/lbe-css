@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Block ({{ block.height }}) {{ block.hash }}</h1>
-<table>
+<h1>{% if coin %}{{ coin }} {% endif %}Block ({{ block.height }})</h1>
+<table class="pure-table" style="width: 100%;">
     <tr>
         <th>height</th>
         <td>{{ block.height }}</td>
@@ -19,11 +19,11 @@
         <td><a href="/block/{{ block.nextblockhash }}">{{ block.nextblockhash }}</a></td>
     </tr>
     <tr>
-        <th>time</th>
-        <td>{{ block.time }}</td>
+        <th>age</th>
+        <td><time class="timeago" datetime="{{ block.time|iso_time }}">{{ block.time|iso_time }}</time></td>
     </tr>
     <tr>
-        <th>formated</th>
+        <th>time</th>
         <td>{{ block.time|formated_time }}</td>
     </tr>
     <tr>
@@ -38,6 +38,12 @@
         <th>size</th>
         <td>{{ block.size }}</td>
     </tr>
+{% if eqhash>0 %}
+    <tr>
+        <th>solution size</th>
+        <td>{{ block.solution_size }}</td>
+    </tr>
+ {% endif %}
     <tr>
         <th>version</th>
         <td>{{ block.version }}</td>
@@ -64,13 +70,32 @@
     </tr>
     <tr>
         <th></th>
-        <td>{{ coinbase.coinbase_text }}</td>
+        <td><pre>{{ coinbase.coinbase_text }}</pre></td>
     </tr>
+{% if eqhash>0 %}
+    <tr>
+        <th>raw header</th>
+        <td><input value="{{ block.raw}}" style="width: 100%;" /></td>
+    </tr>
+    <tr>
+        <th>nonce</th>
+        <td><input value="{{ block.nonce }}" style="width:100%;" /></td>
+    </tr>
+    <tr>
+        <th>nonce text</th>
+        <td><pre>{{ block.nonce_text }}</pre></td>
+    </tr>
+    <tr>
+        <th>solution</th>
+        <td><pre>{% for chunk in block.solution_br %}{{ chunk }}
+{% endfor %}</pre></td>
+    </tr>
+ {% endif %}
 </table>
 
 <h3>Transactions</h3>
 
-<table>
+<table class="pure-table" style="width: 100%;">
     <tr>
         <th>hash</th>
     </tr>
@@ -80,4 +105,9 @@
     </tr>
 {% endfor %}
 </table>
+<script>
+$(document).ready(function() {
+  $("time.timeago").timeago();
+});
+</script>
 {% endblock content %}
