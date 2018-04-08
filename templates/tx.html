@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Transaction {{ tx.txid }}</h1>
+<h1>{% if coin %}{{ coin }} {% endif %}Transaction {{ tx.txid }}</h1>
 
-<table>
+<table class="pure-table" style="width: 100%;">
     <tr>
         <th>txid</th>
         <td>{{ tx.tx.txid }}</td>
@@ -15,23 +15,19 @@
         <th>version</th>
         <td>{{ tx.tx.version }}</td>
     </tr>
+{% if tx.is_coinbase %}
+    <tr>
+        <th>coinbase</th>
+        <td>{{ tx.coinbase }}</td>
+    </tr>
+    <tr>
+        <th></th>
+        <td>{{ tx.coinbase_text }}</td>
+    </tr>
+{% endif %}
 </table>
 
-{% if tx.is_coinbase %}
-    <p>This is a coinbase transaction.</p>
-    <table>
-        <tr>
-            <th>coinbase</th>
-            <td>{{ tx.coinbase }}</td>
-        </tr>
-        <tr>
-            <th></th>
-            <td>{{ tx.coinbase_text }}</td>
-        </tr>
-    </table>
-{% endif %}
-
-<table>
+<table class="pure-table" style="width: 100%;">
     <tr>
         {% if not tx.is_coinbase %}<th>Inputs</th>{% endif %}
         <th>Outputs</th>
