@@ -175,8 +175,8 @@ def timectime(s):
 def index():
     try:
         blocks = xcoind.getlastnblocks(args.n_last_blocks)
-    except (TransportError, ProtocolError), e:
-        print e
+    except ((TransportError, ProtocolError), e):
+        print(e)
         return render_template('error_xcoind.html', coin=args.coin)
     return render_template('index.html', blocks=blocks, coin=args.coin)
 
@@ -186,8 +186,8 @@ def block(hash):
     try:
         block = xcoind.getblock(hash)
         coinbase = xcoind.getsimpletx(block['tx'][0])
-    except (TransportError, ProtocolError), e:
-        print e
+    except ((TransportError, ProtocolError), e):
+        print(e)
         return render_template('error_xcoind.html', coin=args.coin)
 
     return render_template('block.html', block=block, coinbase=coinbase, coin=args.coin)
@@ -196,12 +196,11 @@ def block(hash):
 def tx(hash):
     try:
         tx = xcoind.getsimpletx(hash)
-    except (TransportError, ProtocolError), e:
-        print e
+    except ((TransportError, ProtocolError), e):
+        print(e)
         return render_template('error_xcoind.html', coin=args.coin)
 
     return render_template('tx.html', tx=tx, coin=args.coin)
 
 if __name__ == '__main__':
     app.run(host=args.HOST, port=args.PORT)
-
